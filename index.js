@@ -9,6 +9,29 @@ function shuffle(arr) {
     .map(({ value }) => value);
 }
 
+function gameLogic(event) {
+  const emojiCard = event.target;
+  emojiCard.classList.add("emoji-revealed");
+
+  if (!prevEmoji) {
+    prevEmoji = emojiCard;
+    return;
+  }
+  if (prevEmoji === emojiCard) return;
+
+  if (emojiCard.innerHTML == prevEmoji.innerHTML) {
+    emojiCard.removeEventListener("click", gameLogic);
+    prevEmoji.removeEventListener("click", gameLogic);
+  } else {
+    const localprevEmoji = prevEmoji;
+    setTimeout(() => {
+      localprevEmoji.classList.remove("emoji-revealed");
+      emojiCard.classList.remove("emoji-revealed");
+    }, 300);
+  }
+  prevEmoji = null;
+}
+
 function renderCards() {
   let cardsHTML = "";
   shuffle(emojis).forEach((emoji) => {
@@ -22,21 +45,7 @@ function renderCards() {
     emojiCard.classList.add("emoji-revealed");
     setTimeout(()=>emojiCard.classList.remove("emoji-revealed"),1000)
     */
-    emojiCard.addEventListener("click", () => {
-      emojiCard.classList.add("emoji-revealed");
-      if (prevEmoji) {
-        if (prevEmoji === emojiCard) return;
-        setTimeout(() => {
-          if (emojiCard.innerHTML != prevEmoji.innerHTML) {
-            prevEmoji.classList.remove("emoji-revealed");
-            emojiCard.classList.remove("emoji-revealed");
-          }
-          prevEmoji = null;
-        }, 500);
-      } else {
-        prevEmoji = emojiCard;
-      }
-    });
+    emojiCard.addEventListener("click", gameLogic);
   });
 }
 
