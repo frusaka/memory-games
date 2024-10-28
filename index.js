@@ -1,5 +1,4 @@
 let prevEmoji;
-let prevPaired = { pending: false, timeoutId: null, timeoutFunc: null };
 let emojis = [
   "🐊",
   "🦆",
@@ -17,7 +16,22 @@ let emojis = [
   "🦀",
   "🐘",
   "🐐",
+  "🦭",
+  "🐈",
+  "🐧",
+  "🦩",
 ];
+let prevPaired = {
+  pending: false,
+  timeoutId: null,
+  timeoutFunc: null,
+  celebrateId: null,
+  cancel() {
+    clearTimeout(this.timeoutId);
+    clearTimeout(this.celebrateId);
+    this.timeoutFunc();
+  },
+};
 // emojis = emojis.concat(emojis);
 
 function shuffle(arr) {
@@ -29,7 +43,7 @@ function shuffle(arr) {
 
 function celebrate(currEmoji, success) {
   const celebrateClass = success ? "emoji-right" : "emoji-wrong";
-  setTimeout(() => {
+  prevPaired.celebrateId = setTimeout(() => {
     currEmoji.classList.add(celebrateClass);
     prevEmoji.classList.add(celebrateClass);
   }, 250);
@@ -46,7 +60,6 @@ function celebrate(currEmoji, success) {
   };
 
   prevPaired.timeoutId = setTimeout(prevPaired.timeoutFunc, 700);
-
   prevPaired.pending = true;
 }
 
@@ -55,10 +68,7 @@ function gameLogic(event) {
   if (prevEmoji === currEmoji) return;
 
   //Dem fast clickers 😎
-  if (prevPaired.pending) {
-    clearTimeout(prevPaired.timeoutId);
-    prevPaired.timeoutFunc();
-  }
+  if (prevPaired.pending) prevPaired.cancel();
 
   currEmoji.classList.add("emoji-reveal");
 
