@@ -41,11 +41,25 @@ body {
 .emoji {
   font-size: 124px;
   background-color: #eee;
-  color: transparent;
-  text-align: center;
+  transition: transform 0.4s;
+  transform: rotateY(180deg);
+  transform-style: preserve-3d;
   cursor: pointer;
 }
 
-.emoji-revealed {
-  color: initial;
+.emoji::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background: #eee;
+  transform: rotateY(180deg);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.emoji-reveal {
+  transform: rotateY(0deg);
 }
