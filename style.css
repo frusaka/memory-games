@@ -33,16 +33,16 @@ body {
 .cards-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  /* background-color: black; */
-  /* column-gap: 2px; */
-  /* row-gap: 2px; */
+  /* background-color: black;
+  column-gap: 2px;
+  row-gap: 2px; */
 }
 
 .emoji {
   font-size: 124px;
   background-color: #eee;
   outline: 2px solid #12343b;
-  transition: transform 0.4s;
+  transition: all 0.4s;
   transform: rotateY(180deg);
   transform-style: preserve-3d;
   cursor: pointer;
@@ -63,4 +63,30 @@ body {
 
 .emoji-reveal {
   transform: rotateY(0deg);
+}
+
+.emoji-wrong,
+.emoji-right {
+  transform: rotateY(0deg);
+}
+
+.emoji-wrong::after,
+.emoji-right::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  opacity: 0.2;
+  transform: rotateY(180deg);
+  backface-visibility: visible;
+}
+
+.emoji-wrong::after {
+  background-color: red;
+}
+
+.emoji-right::after {
+  background-color: green;
 }
