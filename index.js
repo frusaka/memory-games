@@ -26,7 +26,7 @@ let emojis = [
   "🦔",
   "🦢",
   "🦈",
-  "🐚"
+  "🐚",
 ];
 let pairedEmojis = 0;
 let prevPaired = {
@@ -99,11 +99,11 @@ function gameLogic(event) {
   //Pair has been found
   currEmoji.removeEventListener("click", gameLogic);
   prevEmoji.removeEventListener("click", gameLogic);
-  celebrate(currEmoji, true);
 
   // Finished the game?
   pairedEmojis++;
-  if (pairedEmojis == 8) resetGame();
+  if (pairedEmojis < 8) celebrate(currEmoji, true);
+  else resetGame();
 }
 
 function resetGame() {
@@ -115,7 +115,7 @@ function resetGame() {
     cardsGrid.querySelectorAll(".js-emoji").forEach((emoji) => {
       emoji.classList.remove("emoji-reveal");
     });
-    setTimeout(renderCards, 400);
+    setTimeout(renderCards, 500);
   }, 700);
 
   // Reset previous pointers
