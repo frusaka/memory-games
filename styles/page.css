@@ -39,13 +39,13 @@ input[type="range"]:focus {
   display: grid;
   grid-template-columns: 5rem 1fr;
   width: 30rem;
-  /* background-color: darkred; */
+  row-gap: 1rem;
   color: #eee;
   font-size: 1rem;
   letter-spacing: 0.1rem;
   border-radius: 1rem;
   padding: 0 2rem;
-  margin-top: 1rem;
+  margin-bottom: 1rem;
   border: none;
   cursor: pointer;
 }
