@@ -50,7 +50,7 @@ function shuffle(arr) {
 
 function celebrate(currEmoji, success) {
   const celebrateClass = success ? "emoji-right" : "emoji-wrong";
-  // Use color to temporarily show user wether they are right or not
+  // Use color to temporarily show user whether they are right or not
   prevPaired.celebrateId = setTimeout(() => {
     currEmoji.classList.add(celebrateClass);
     prevEmoji.classList.add(celebrateClass);
@@ -79,7 +79,7 @@ function gameLogic(event) {
   const currEmoji = event.target;
   if (prevEmoji === currEmoji) return;
 
-  //Dem fast clickers 😎
+  // Dem fast clickers 😎
   if (prevPaired.pending) prevPaired.cancel();
 
   currEmoji.classList.add("emoji-reveal");
@@ -96,7 +96,7 @@ function gameLogic(event) {
     return;
   }
 
-  //Pair has been found
+  // Pair has been found
   currEmoji.removeEventListener("click", gameLogic);
   prevEmoji.removeEventListener("click", gameLogic);
 
@@ -116,7 +116,7 @@ function resetGame() {
       emoji.classList.remove("emoji-reveal");
     });
     setTimeout(renderCards, 500);
-  }, 700);
+  }, 1000);
 
   // Reset previous pointers
   pairedEmojis = 0;
@@ -127,17 +127,12 @@ function renderCards() {
   let cardsHTML = "";
   let gameEmojis = shuffle(emojis).slice(0, 8);
   shuffle(gameEmojis.concat(gameEmojis)).forEach((emoji) => {
-    cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
+    cardsHTML += `<div class="emoji emoji-hide js-emoji">${emoji}</div>`;
   });
   document.querySelector(".js-cards").innerHTML = cardsHTML;
-  document.querySelectorAll(".js-emoji").forEach((emoji) => {
-    /*
-    // Wanna get a full picture before starting?
-    emoji.classList.add("emoji-reveal");
-    setTimeout(()=>emoji.classList.remove("emoji-reveal"),1000)
-    */
-    emoji.addEventListener("click", gameLogic);
-  });
+  document
+    .querySelectorAll(".js-emoji")
+    .forEach((emoji) => emoji.addEventListener("click", gameLogic));
 }
 
 renderCards();

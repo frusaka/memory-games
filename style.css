@@ -20,6 +20,7 @@ h1 {
   border: none;
   background-color: darkred;
   border-radius: 1rem;
+  padding: 0 2rem;
   cursor: pointer;
 }
 
@@ -53,31 +54,38 @@ h1 {
   bottom: 0;
   left: 0;
   right: 0;
-  transform: rotateY(180deg);
   transform-style: preserve-3d;
 }
 
 .emoji::after {
-  background: darkgray;
+  content: "?";
+  font: 9rem "Franklin Gothic Medium";
+  color: #b87700;
+  background: darkslateblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(180deg);
   backface-visibility: hidden;
 }
 
-.emoji-reveal {
-  transform: rotateY(0deg);
-}
-
+.emoji-reveal,
 .game-won,
 .emoji-wrong,
 .emoji-right {
   transform: rotateY(0deg);
 }
 
+.game-won {
+  box-shadow: 0 0 2rem #98e784;
+}
+
 .game-won::after,
 .emoji-wrong::after,
 .emoji-right::after {
+  content: "";
   opacity: 0.2;
-  transform: rotateY(180deg);
-  backface-visibility: visible;
+  transform: rotateY(0deg);
 }
 
 .emoji-wrong::after {
