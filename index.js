@@ -7,7 +7,7 @@ let emojis = [
   "🦚",
   "🐋",
   "🐦",
-  "🐶",
+  "🐩",
   "🐠",
   "🦉",
   "🦖",
@@ -20,7 +20,15 @@ let emojis = [
   "🐈",
   "🐧",
   "🦩",
+  "🪼",
+  "🦄",
+  "🐓",
+  "🦔",
+  "🦢",
+  "🦈",
+  "🐚"
 ];
+let pairedEmojis = 0;
 let prevPaired = {
   pending: false,
   timeoutId: null,
@@ -32,7 +40,6 @@ let prevPaired = {
     this.timeoutFunc();
   },
 };
-// emojis = emojis.concat(emojis);
 
 function shuffle(arr) {
   return arr
@@ -43,18 +50,23 @@ function shuffle(arr) {
 
 function celebrate(currEmoji, success) {
   const celebrateClass = success ? "emoji-right" : "emoji-wrong";
+  // Use color to temporarily show user wether they are right or not
   prevPaired.celebrateId = setTimeout(() => {
     currEmoji.classList.add(celebrateClass);
     prevEmoji.classList.add(celebrateClass);
   }, 250);
 
   prevPaired.timeoutFunc = () => {
+    // Hide right/wrong feedback
     prevEmoji.classList.remove(celebrateClass);
     currEmoji.classList.remove(celebrateClass);
+
+    // Hide non-matching pairs
     if (!success) {
       prevEmoji.classList.remove("emoji-reveal");
       currEmoji.classList.remove("emoji-reveal");
     }
+
     prevEmoji = null;
     prevPaired.pending = false;
   };
@@ -72,18 +84,43 @@ function gameLogic(event) {
 
   currEmoji.classList.add("emoji-reveal");
 
+  // User has not yet clicked another card to match
   if (!prevEmoji) {
     prevEmoji = currEmoji;
     return;
   }
 
-  if (currEmoji.innerHTML == prevEmoji.innerHTML) {
-    currEmoji.removeEventListener("click", gameLogic);
-    prevEmoji.removeEventListener("click", gameLogic);
-    celebrate(currEmoji, true);
-  } else {
+  // Pair chosen is incorrect
+  if (currEmoji.innerHTML != prevEmoji.innerHTML) {
     celebrate(currEmoji, false);
+    return;
   }
+
+  //Pair has been found
+  currEmoji.removeEventListener("click", gameLogic);
+  prevEmoji.removeEventListener("click", gameLogic);
+  celebrate(currEmoji, true);
+
+  // Finished the game?
+  pairedEmojis++;
+  if (pairedEmojis == 8) resetGame();
+}
+
+function resetGame() {
+  // Smooth reset
+  const cardsGrid = document.querySelector(".js-cards");
+  setTimeout(() => cardsGrid.classList.add("game-won"), 250);
+  setTimeout(() => {
+    cardsGrid.classList.remove("game-won");
+    cardsGrid.querySelectorAll(".js-emoji").forEach((emoji) => {
+      emoji.classList.remove("emoji-reveal");
+    });
+    setTimeout(renderCards, 400);
+  }, 700);
+
+  // Reset previous pointers
+  pairedEmojis = 0;
+  prevEmoji = null;
 }
 
 function renderCards() {
@@ -93,7 +130,6 @@ function renderCards() {
     cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
   });
   document.querySelector(".js-cards").innerHTML = cardsHTML;
-  document.querySelector(".js-reset").addEventListener("click", renderCards);
   document.querySelectorAll(".js-emoji").forEach((emoji) => {
     /*
     // Wanna get a full picture before starting?

@@ -2,26 +2,24 @@ body {
   background-color: #12343b;
 }
 
+h1 {
+  color: #eee;
+  letter-spacing: 0.2rem;
+  margin: none;
+  padding: none;
+}
+
 .main {
-  /* background-color: #eee;#e1b382; */
-  margin: auto;
-  /* width: max-content; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 12px;
+  row-gap: 1rem;
 }
 
 .reset {
   border: none;
   background-color: darkred;
-  color: #eee;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  border-radius: 12px;
-  height: 48px;
-  width: 240px;
+  border-radius: 1rem;
   cursor: pointer;
 }
 
@@ -32,32 +30,35 @@ body {
 
 .cards-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  /* background-color: black;
-  column-gap: 2px;
-  row-gap: 2px; */
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .emoji {
-  font-size: 124px;
+  font-size: 7.6rem;
   background-color: #eee;
-  outline: 2px solid #12343b;
+  outline: 0.15rem solid #12343b;
   transition: all 0.4s;
   transform: rotateY(180deg);
   transform-style: preserve-3d;
   cursor: pointer;
 }
 
-.emoji::after {
+.emoji::after,
+.game-won::after,
+.emoji-wrong::after,
+.emoji-right::after {
   content: "";
   position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  background: darkgray;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   transform: rotateY(180deg);
   transform-style: preserve-3d;
+}
+
+.emoji::after {
+  background: darkgray;
   backface-visibility: hidden;
 }
 
@@ -65,19 +66,15 @@ body {
   transform: rotateY(0deg);
 }
 
+.game-won,
 .emoji-wrong,
 .emoji-right {
   transform: rotateY(0deg);
 }
 
+.game-won::after,
 .emoji-wrong::after,
 .emoji-right::after {
-  content: "";
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
   opacity: 0.2;
   transform: rotateY(180deg);
   backface-visibility: visible;
@@ -87,6 +84,7 @@ body {
   background-color: red;
 }
 
+.game-won::after,
 .emoji-right::after {
   background-color: green;
 }
