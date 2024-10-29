@@ -1,0 +1,56 @@
+body {
+  background-color: #12343b;
+}
+
+h1 {
+  color: #eee;
+  letter-spacing: 0.2rem;
+}
+
+p {
+  color: #eee;
+}
+
+input[type="range"] {
+  /* width: 85%; */
+  accent-color: #b87700;
+  display: block;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+.game-core {
+  display: grid;
+  grid-template-columns: 1rem 1fr;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  margin: auto;
+}
+
+.settings {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  width: 30rem;
+  /* background-color: darkred; */
+  color: #eee;
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+  border-radius: 1rem;
+  padding: 0 2rem;
+  margin-top: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.reset:hover {
+  background-color: #9e3131;
+  transform: scale(1.05);
+}

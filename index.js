@@ -27,8 +27,21 @@ let emojis = [
   "🦢",
   "🦈",
   "🐚",
+  "🐢",
+  "🦝",
+  "🐯",
+  "🦒",
+  "🦇",
+  "🐑",
 ];
 let pairedEmojis = 0;
+let grid = {
+  rows: 4,
+  columns: 4,
+  total() {
+    return Math.floor((this.rows * this.columns) / 2);
+  },
+};
 let prevPaired = {
   pending: false,
   timeoutId: null,
@@ -40,6 +53,8 @@ let prevPaired = {
     this.timeoutFunc();
   },
 };
+
+const cardsGrid = document.querySelector(".js-cards");
 
 function shuffle(arr) {
   return arr
@@ -102,13 +117,12 @@ function gameLogic(event) {
 
   // Finished the game?
   pairedEmojis++;
-  if (pairedEmojis < 8) celebrate(currEmoji, true);
+  if (pairedEmojis < grid.total()) celebrate(currEmoji, true);
   else resetGame();
 }
 
 function resetGame() {
   // Smooth reset
-  const cardsGrid = document.querySelector(".js-cards");
   setTimeout(() => cardsGrid.classList.add("game-won"), 250);
   setTimeout(() => {
     cardsGrid.classList.remove("game-won");
@@ -125,14 +139,29 @@ function resetGame() {
 
 function renderCards() {
   let cardsHTML = "";
-  let gameEmojis = shuffle(emojis).slice(0, 8);
-  shuffle(gameEmojis.concat(gameEmojis)).forEach((emoji) => {
+  let gameEmojis = shuffle(emojis).slice(0, grid.total());
+  gameEmojis = gameEmojis.concat(gameEmojis);
+  // Fill empty spot on a grid with an odd number of cards
+  if ((grid.rows * grid.columns) % 2) {
+    gameEmojis.push("");
+  }
+  //Generate html for the cards
+  shuffle(gameEmojis).forEach((emoji) => {
     cardsHTML += `<div class="emoji emoji-hide js-emoji">${emoji}</div>`;
   });
-  document.querySelector(".js-cards").innerHTML = cardsHTML;
+  // Fill grid
+  cardsGrid.style = `grid-template-columns:repeat(${grid.rows},1fr)`;
+  cardsGrid.innerHTML = cardsHTML;
   document
     .querySelectorAll(".js-emoji")
     .forEach((emoji) => emoji.addEventListener("click", gameLogic));
 }
+
+document.querySelectorAll("input[type='range']").forEach((input) => {
+  input.oninput = () => {
+    grid[input.id] = +input.value;
+    renderCards();
+  };
+});
 
 renderCards();

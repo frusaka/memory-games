@@ -3,19 +3,21 @@
   <head>
     <title>Pair Mathcing</title>
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles/page.css" />
+    <link rel="stylesheet" href="styles/cards.css" />
     <script src="index.js" defer></script>
   </head>
 
   <body>
     <div class="main">
-      <div>
-        <h1>Find The Matching Pairs</h1>
+      <h1>Find The Matching Pairs</h1>
+      <div class="settings">
+        <label for="rows">Rows</label>
+        <input type="range" min="1" max="8" value="4" id="rows" />
+        <label for="columns">Columns</label>
+        <input type="range" min="1" max="8" value="4" id="columns" />
       </div>
       <div class="cards-grid js-cards"></div>
-      <button class="reset js-reset" onclick="renderCards()">
-        <h1>Regenerate</h1>
-      </button>
     </div>
   </body>
 </html>
