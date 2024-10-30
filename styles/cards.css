@@ -1,4 +1,5 @@
 .cards-grid {
+  background-color: #eee;
   display: grid;
   margin: auto;
   width: max-content;
