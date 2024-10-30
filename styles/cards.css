@@ -1,13 +1,14 @@
 .cards-grid {
   display: grid;
-  /* grid-template-columns: repeat(4, 1fr); */
+  margin: auto;
+  width: max-content;
+  gap: 0.2rem;
 }
 
 .emoji {
-  font-size: 7.6rem;
+  font-size: calc(((55vh / var(--cols)) + (50vw / var(--rows))) / 2);
   background-color: #eee;
-  outline: 0.15rem solid #12343b;
-  transition: all 0.4s;
+  transition: transform 0.4s;
   transform: rotateY(180deg);
   transform-style: preserve-3d;
   cursor: pointer;
@@ -28,7 +29,8 @@
 
 .emoji::after {
   content: "?";
-  font: 9rem "Franklin Gothic Medium";
+  font-size: inherit;
+  font-family: "Franklin Gothic Medium";
   color: #b87700;
   background: darkslateblue;
   display: flex;

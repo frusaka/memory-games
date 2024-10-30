@@ -150,12 +150,21 @@ function renderCards() {
     cardsHTML += `<div class="emoji emoji-hide js-emoji">${emoji}</div>`;
   });
   // Fill grid
-  cardsGrid.style = `grid-template-columns:repeat(${grid.rows},1fr)`;
+  cardsGrid.style = `
+    --cols:${grid.columns};
+    --rows:${grid.rows};
+    grid-template-columns:repeat(${grid.rows},1fr);
+  `;
   cardsGrid.innerHTML = cardsHTML;
   document
     .querySelectorAll(".js-emoji")
     .forEach((emoji) => emoji.addEventListener("click", gameLogic));
 }
+
+document.querySelector(".js-start").onclick = () => {
+  document.querySelector(".js-home").style.visibility = "collapse";
+  document.querySelector(".js-game").style.display = "flex";
+};
 
 document.querySelectorAll("input[type='range']").forEach((input) => {
   input.oninput = () => {
