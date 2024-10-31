@@ -149,12 +149,12 @@ function resetGame() {
     bestScore = newScore;
     localStorage.setItem("image-pairing-best-score", bestScore);
   }
-  // Reset previous pointers
-  pairedEmojis = 0;
-  prevEmoji = null;
 }
 
 function renderCards() {
+  // Reset previous pointers
+  pairedEmojis = 0;
+  prevEmoji = null;
   let cardsHTML = "";
   cardsArray(gridTotal).forEach((emoji) => {
     cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
