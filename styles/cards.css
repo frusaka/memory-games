@@ -6,6 +6,7 @@
 }
 
 .emoji {
+  /* margin: auto; */
   font-size: var(--size);
   background-color: #eee;
   transition: transform 0.4s;
@@ -48,6 +49,7 @@
 }
 
 .game-won {
+  background-color: #98e7848a;
   box-shadow: 0 0 2rem #98e784;
 }
 

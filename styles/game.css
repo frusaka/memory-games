@@ -71,3 +71,14 @@ input[type="checkbox"]:checked ~ .settings {
   background-color: #9e3131;
   transform: scale(1.05);
 }
+
+#score {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: green;
+  padding: 1rem;
+  border-radius: 2rem;
+}
