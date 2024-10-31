@@ -156,7 +156,7 @@ function finishGame() {
   // Smooth reset
   setTimeout(() => {
     cardsGrid.classList.add("game-won");
-    document.getElementById("score-number").innerText = currScore;
+    document.getElementById("score-number").innerText = `${currScore}%`;
     document.getElementById("score").style.display = "initial";
   }, 250);
   // Reset previous pointers
