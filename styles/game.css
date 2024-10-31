@@ -1,28 +1,70 @@
 .game {
-  display: none;
+  /* display: none; */
   flex-direction: column;
   align-items: center;
 }
 
-input[type="range"] {
-  accent-color: #b87700;
-  display: block;
+input[type="number"] {
+  width: 100%;
+  /* flex: 1; */
 }
 
-input[type="range"]:focus {
+input[type="number"]:focus {
   outline: none;
 }
 
+input[type="number"]::after {
+  position: absolute;
+  left: 50%;
+  content: attr(value);
+  color: white;
+}
+
+.header,
 .settings {
-  display: grid;
-  grid-template-columns: 20vw 1fr;
-  width: 70vw;
-  row-gap: 2vh;
-  font-size: 3vw;
+  width: 100%;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  border-radius: 0.5rem;
+  column-gap: 1rem;
+  font-size: 1.2rem;
   letter-spacing: 0.1rem;
-  margin-bottom: 2vh;
+}
+
+.header {
+  justify-content: space-between;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"]:checked ~ .settings {
+  display: flex;
+}
+
+.settings button {
+  width: 2em;
+  background-color: #565656;
+  color: #eee;
+  border-radius: 0.3rem;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+}
+
+.settings * {
+  font-size: 1.2rem;
+}
+
+.scores {
+  display: flex;
+  column-gap: 1em;
+  padding-right: 1.5em;
 }
 
 .reset:hover {

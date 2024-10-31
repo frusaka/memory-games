@@ -1,12 +1,12 @@
 .cards-grid {
-  display: grid;
-  margin: auto;
-  width: max-content;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 0.2rem;
 }
 
 .emoji {
-  font-size: calc(((55vh / var(--cols)) + (50vw / var(--rows))) / 2);
+  font-size: var(--size);
   background-color: #eee;
   transition: transform 0.4s;
   transform: rotateY(180deg);

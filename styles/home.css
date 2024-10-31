@@ -17,6 +17,7 @@ h2 {
 }
 
 .home {
+  display: none;
   width: 100%;
   position: absolute;
   top: 50%;
