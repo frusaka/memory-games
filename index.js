@@ -1,4 +1,4 @@
-let prevEmoji, sizeTimoutId;
+let prevEmoji;
 let emojis = [
   "🐊",
   "🦆",
