@@ -7,12 +7,12 @@ body {
 }
 
 h1 {
-  font-size: 11vw;
+  font-size: 3rem;
   text-transform: uppercase;
 }
 
 h2 {
-  font-size: 6vw;
+  font-size: 2.2rem;
   margin: 5%;
 }
 
@@ -31,8 +31,8 @@ h2 {
 
 .home button {
   background-color: darkred;
-  width: 50vw;
-  border-radius: 25vw;
+  padding: 1rem 4rem;
+  border-radius: 4rem;
   border: none;
   transition: background-color 0.24s, transform 0.24s;
   cursor: pointer;

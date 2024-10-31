@@ -43,9 +43,9 @@ let emojis = [
 ];
 
 let gridTotal = 8;
-let pairedEmojis = (totalClicks = wrongClicks = 0);
+let pairedEmojis = 0;
 let bestScore =
-  JSON.parse(localStorage.getItem("image-pairing-best-score")) || 0;
+  JSON.parse(sessionStorage.getItem("image-pairing-best-score")) || 0;
 let prevPaired = {
   pending: false,
   timeoutId: null,
@@ -58,6 +58,7 @@ let prevPaired = {
   },
 };
 
+let attempts = { attempted: new Set(), wrong: 0, total: 0 };
 const cardsGrid = document.getElementById("cards");
 
 function shuffle(arr) {
@@ -86,20 +87,22 @@ function celebrate(currEmoji, success) {
     prevEmoji.classList.remove(celebrateClass);
     currEmoji.classList.remove(celebrateClass);
 
-    // Hide non-matching pairs
     if (!success) {
+      // Hide non-matching pairs
       prevEmoji.classList.remove("emoji-reveal");
       currEmoji.classList.remove("emoji-reveal");
-      wrongClicks++;
+      // Update scores
+      if (attempts.attempted.has(currEmoji.innerHTML)) attempts.wrong++;
+      else attempts.attempted.add(currEmoji.innerHTML);
     }
 
     prevEmoji = null;
     prevPaired.pending = false;
   };
 
+  attempts.total++;
   prevPaired.timeoutId = setTimeout(prevPaired.timeoutFunc, 700);
   prevPaired.pending = true;
-  totalClicks++;
 }
 
 function gameLogic(event) {
@@ -144,17 +147,23 @@ function resetGame() {
     setTimeout(renderCards, 500);
   }, 1000);
   // Record Score
-  let newScore = Math.round(((totalClicks - wrongClicks) / totalClicks) * 100);
+  let newScore = Math.round(
+    ((attempts.total - attempts.wrong) / attempts.total) * 100
+  );
   if (newScore > bestScore) {
     bestScore = newScore;
-    localStorage.setItem("image-pairing-best-score", bestScore);
+    sessionStorage.setItem("image-pairing-best-score", bestScore);
   }
-  // Reset previous pointers
-  pairedEmojis = 0;
-  prevEmoji = null;
 }
 
 function renderCards() {
+  // Reset previous pointers
+  prevEmoji = null;
+  pairedEmojis = 0;
+  attempts.attempted.clear();
+  attempts.wrong = 0;
+  attempts.total = 0;
+
   let cardsHTML = "";
   cardsArray(gridTotal).forEach((emoji) => {
     cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
