@@ -44,6 +44,7 @@ let emojis = [
 
 let gridTotal = 8;
 let pairedEmojis = 0;
+let currScore = 0;
 let bestScore =
   JSON.parse(sessionStorage.getItem("image-pairing-best-score")) || 0;
 let prevPaired = {
@@ -140,44 +141,40 @@ function gameLogic(event) {
   // Finished the game?
   pairedEmojis++;
   if (pairedEmojis < gridTotal) celebrate(currEmoji, true);
-  else resetGame();
+  else finishGame();
 }
 
-function resetGame() {
+function finishGame() {
+  // Store score
+  currScore = Math.round(
+    ((attempts.total - attempts.wrong) / attempts.total) * 100
+  );
+  if (currScore > bestScore) {
+    bestScore = currScore;
+    sessionStorage.setItem("image-pairing-best-score", bestScore);
+  }
   // Smooth reset
   setTimeout(() => {
     cardsGrid.classList.add("game-won");
-    document.getElementById("score-number").innerText = newScore;
+    document.getElementById("score-number").innerText = currScore;
     document.getElementById("score").style.display = "initial";
   }, 250);
+  // Reset previous pointers
+  attempts.attempted.clear();
+  prevEmoji = null;
+  pairedEmojis = attempts.wrong = attempts.total = 0;
+}
 
-  setTimeout(() => {
-    document.getElementById("score").style.display = "none";
-    cardsGrid.classList.remove("game-won");
-    cardsGrid.querySelectorAll(".js-emoji").forEach((emoji) => {
-      emoji.classList.remove("emoji-reveal");
-    });
-    setTimeout(renderCards, 500);
-  }, 3000);
-
-  // Store score
-  let newScore = Math.round(
-    ((attempts.total - attempts.wrong) / attempts.total) * 100
-  );
-  if (newScore > bestScore) {
-    bestScore = newScore;
-    sessionStorage.setItem("image-pairing-best-score", bestScore);
-  }
+function restartGame() {
+  document.getElementById("score").style.display = "none";
+  cardsGrid.classList.remove("game-won");
+  cardsGrid.querySelectorAll(".js-emoji").forEach((emoji) => {
+    emoji.classList.remove("emoji-reveal");
+  });
+  setTimeout(renderCards, 500);
 }
 
 function renderCards() {
-  // Reset previous pointers
-  prevEmoji = null;
-  pairedEmojis = 0;
-  attempts.attempted.clear();
-  attempts.wrong = 0;
-  attempts.total = 0;
-
   let cardsHTML = "";
   cardsArray(gridTotal).forEach((emoji) => {
     cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
@@ -222,5 +219,7 @@ document.getElementById("sub").addEventListener("click", () => {
   document.getElementById("size").innerHTML = gridTotal;
   renderCards();
 });
+
+document.getElementById("hide-score").addEventListener("click", restartGame);
 
 renderCards();
