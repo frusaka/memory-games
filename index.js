@@ -26,7 +26,7 @@ let emojis = [
   "🦔",
   "🦢",
   "🦈",
-  "🐚",
+  "🐎",
   "🐢",
   "🦝",
   "🐯",
@@ -40,6 +40,26 @@ let emojis = [
   "🐃",
   "🦛",
   "🦘",
+  "🦧",
+  "🐟",
+  "🪲",
+  "🦃",
+  "🐄",
+  "🦣",
+  "🐖",
+  "🐆",
+  "🦨",
+  "🕊️",
+  "🐦‍⬛",
+  "🦂",
+  "🦜",
+  "🐝",
+  "🐜",
+  "🐌",
+  "🐀",
+  "🦬",
+  "🦥",
+  "🐸",
 ];
 
 let gridTotal = 8;
@@ -202,22 +222,18 @@ document.getElementById("start").addEventListener("click", () => {
   document.getElementById("game").style.display = "flex";
 });
 
-document.getElementById("add").addEventListener("click", () => {
-  if (gridTotal == emojis.length) {
+const sizeElement = document.getElementById("size");
+sizeElement.addEventListener("input", () => {
+  if (sizeElement.value < 2) {
+    sizeElement.value = gridTotal;
     return;
   }
-  gridTotal++;
-  document.getElementById("size").innerHTML = gridTotal;
+  gridTotal = +sizeElement.value;
   renderCards();
 });
 
-document.getElementById("sub").addEventListener("click", () => {
-  if (gridTotal == 2) {
-    return;
-  }
-  gridTotal--;
-  document.getElementById("size").innerHTML = gridTotal;
-  renderCards();
+sizeElement.addEventListener("invalid", () => {
+  sizeElement.value = gridTotal;
 });
 
 document.getElementById("hide-score").addEventListener("click", restartGame);

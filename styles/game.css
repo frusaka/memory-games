@@ -4,20 +4,9 @@
   align-items: center;
 }
 
-input[type="number"] {
-  width: 100%;
-  /* flex: 1; */
-}
-
-input[type="number"]:focus {
-  outline: none;
-}
-
-input[type="number"]::after {
-  position: absolute;
-  left: 50%;
-  content: attr(value);
-  color: white;
+#size {
+  border-radius: 5px;
+  border: none;
 }
 
 .header,
@@ -37,14 +26,6 @@ input[type="number"]::after {
   justify-content: space-between;
 }
 
-input[type="checkbox"] {
-  display: none;
-}
-
-input[type="checkbox"]:checked ~ .settings {
-  display: flex;
-}
-
 .settings button {
   width: 2em;
   background-color: #565656;
@@ -58,10 +39,10 @@ input[type="checkbox"]:checked ~ .settings {
 }
 
 .settings * {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 
-.scores {
+.best-scores {
   display: flex;
   column-gap: 1em;
   padding-right: 1.5em;

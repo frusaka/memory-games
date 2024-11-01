@@ -20,12 +20,10 @@
     <div class="game" id="game">
       <div class="header">
         <div class="settings">
-          <p>Size:</p>
-          <button id="sub">-</button>
-          <p id="size">8</p>
-          <button id="add">+</button>
+          <label for="size">Size:</label>
+          <input id="size" type="number" value="8" min="2" max="60" />
         </div>
-        <div class="scores">
+        <div class="best-scores">
           <p>Best:</p>
           <p id="best">None</p>
         </div>
