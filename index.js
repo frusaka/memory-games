@@ -113,9 +113,11 @@ function celebrate(currEmoji, success) {
       prevEmoji.classList.remove("emoji-reveal");
       currEmoji.classList.remove("emoji-reveal");
       // Update scores
-      const prevSeen = attempts.seen[prevEmoji.innerHTML];
-      const currClicked = attempts.seen[currEmoji.innerHTML].has(currEmoji);
-      if (prevSeen && currClicked) {
+      if (
+        attempts.seen[prevEmoji.innerHTML].has(prevEmoji) ||
+        (attempts.seen[prevEmoji.innerHTML] &&
+          attempts.seen[currEmoji.innerHTML].has(currEmoji))
+      ) {
         attempts.total++;
         attempts.wrong++;
       }
@@ -183,10 +185,6 @@ function finishGame() {
     document.getElementById("best-score").innerText = `${bestScore}%`;
     document.getElementById("result").style.display = "initial";
   }, 250);
-  // Reset previous pointers
-  prevEmoji = null;
-  attempts.seen.clear();
-  pairedEmojis = attempts.wrong = attempts.right = attempts.total = 0;
 }
 
 function restartGame() {
@@ -199,6 +197,10 @@ function restartGame() {
 }
 
 function renderCards() {
+  // Reset previous pointers
+  prevEmoji = null;
+  attempts.seen.clear();
+  pairedEmojis = attempts.wrong = attempts.right = attempts.total = 0;
   let cardsHTML = "";
   cardsArray(gridTotal).forEach((emoji) => {
     cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
