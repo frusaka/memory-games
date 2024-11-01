@@ -224,13 +224,9 @@ document.getElementById("start").addEventListener("click", () => {
 
 const sizeElement = document.getElementById("size");
 sizeElement.addEventListener("input", () => {
-  if (sizeElement.value <= 2 || sizeElement.value > emojis.length) return;
+  if (sizeElement.value < 2 || sizeElement.value > emojis.length) return;
   gridTotal = +sizeElement.value;
   renderCards();
-});
-
-sizeElement.addEventListener("invalid", () => {
-  sizeElement.value = gridTotal;
 });
 
 document.getElementById("hide-score").addEventListener("click", restartGame);
