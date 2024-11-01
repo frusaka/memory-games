@@ -101,23 +101,6 @@ function celebrate(currEmoji, success) {
   prevPaired.celebrateId = setTimeout(() => {
     currEmoji.classList.add(celebrateClass);
     prevEmoji.classList.add(celebrateClass);
-    // Update scores
-    if (success) {
-      attempts.right++;
-      attempts.total++;
-    } else {
-      if (
-        attempts.seen[prevEmoji.innerHTML].size ||
-        attempts.seen[currEmoji.innerHTML].has(currEmoji)
-      ) {
-        attempts.total++;
-        attempts.wrong++;
-      }
-
-      attempts.seen[prevEmoji.innerHTML].add(prevEmoji);
-      attempts.seen[currEmoji.innerHTML].add(currEmoji);
-    }
-
     document.getElementById(
       "success-rate"
     ).innerHTML = `${attempts.right}/${attempts.total}`;
@@ -136,6 +119,23 @@ function celebrate(currEmoji, success) {
     prevEmoji = null;
     prevPaired.pending = false;
   };
+
+  // Update scores
+  if (success) {
+    attempts.right++;
+    attempts.total++;
+  } else {
+    if (
+      attempts.seen[prevEmoji.innerHTML].size ||
+      attempts.seen[currEmoji.innerHTML].has(currEmoji)
+    ) {
+      attempts.total++;
+      attempts.wrong++;
+    }
+
+    attempts.seen[prevEmoji.innerHTML].add(prevEmoji);
+    attempts.seen[currEmoji.innerHTML].add(currEmoji);
+  }
 
   prevPaired.timeoutId = setTimeout(prevPaired.timeoutFunc, 700);
   prevPaired.pending = true;
@@ -170,7 +170,10 @@ function gameLogic(event) {
   pairedEmojis++;
   celebrate(currEmoji, true);
   if (pairedEmojis == gridTotal) {
-    setTimeout(prevPaired.cancel, 250);
+    document.getElementById(
+      "success-rate"
+    ).innerHTML = `${attempts.right}/${attempts.total}`;
+    prevPaired.cancel();
     finishGame();
   }
 }
