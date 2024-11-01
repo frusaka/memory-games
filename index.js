@@ -115,7 +115,7 @@ function celebrate(currEmoji, success) {
       // Update scores
       if (
         attempts.seen[prevEmoji.innerHTML] ||
-        attempts.seen[currEmoji.innerHTML].has(currEmoji))
+        attempts.seen[currEmoji.innerHTML].has(currEmoji)
       ) {
         attempts.total++;
         attempts.wrong++;
