@@ -23,16 +23,23 @@
           <label for="size">Size:</label>
           <input id="size" type="number" value="8" min="2" max="60" />
         </div>
-        <div class="best-scores">
-          <p>Best:</p>
-          <p id="best">None</p>
+        <div id="success">
+          <p>Sucess:</p>
+          <p id="success-rate" class="score-number">0/0</p>
         </div>
       </div>
       <div class="cards-grid" id="cards"></div>
     </div>
-    <div id="score">
-      <h2>You Got <span id="score-number">0%</span> Accuracy</h2>
-      <button id="hide-score">OK</button>
+    <div id="result">
+      <h2>
+        You Got <span id="score-number" class="score-number">0%</span>
+        Accuracy
+      </h2>
+      <h3>
+        Best:
+        <span class="score-number" id="best-score">0%</span>
+      </h3>
+      <button id="score-ok">OK</button>
     </div>
   </body>
 </html>

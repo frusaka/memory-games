@@ -4,6 +4,7 @@ body {
   background-attachment: fixed;
   text-align: center;
   color: #eee;
+  margin: 0;
 }
 
 h1 {
@@ -17,6 +18,7 @@ h2 {
 }
 
 .home {
+  /* display: none; */
   width: 100%;
   position: absolute;
   top: 50%;

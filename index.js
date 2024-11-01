@@ -79,7 +79,7 @@ let prevPaired = {
   },
 };
 
-let attempts = { seen: new Map(), wrong: 0, total: 0 };
+let attempts = { seen: new Map(), wrong: 0, right: 0, total: 0 };
 const cardsGrid = document.getElementById("cards");
 
 function shuffle(arr) {
@@ -113,30 +113,27 @@ function celebrate(currEmoji, success) {
       prevEmoji.classList.remove("emoji-reveal");
       currEmoji.classList.remove("emoji-reveal");
       // Update scores
-      const prevSeen = attempts.seen.has(prevEmoji.innerHTML);
-      const currSeen =
-        attempts.seen.has(currEmoji.innerHTML) &&
-        attempts.seen.get(currEmoji.innerHTML).has(currEmoji);
-      if (prevSeen || currSeen) {
+      const prevSeen = attempts.seen[prevEmoji.innerHTML];
+      const currClicked = attempts.seen[currEmoji.innerHTML].has(currEmoji);
+      if (prevSeen && currClicked) {
+        attempts.total++;
         attempts.wrong++;
-      } else {
-        if (!prevSeen) {
-          attempts.seen.set(prevEmoji.innerHTML, new Set([prevEmoji]));
-        } else {
-          if (attempts.seen.has(currEmoji.innerHTML)) {
-            attempts.seen[currEmoji.innerHTML].add(currEmoji);
-          } else {
-            attempts.seen.set(currEmoji.innerHTML, new Set([currEmoji]));
-          }
-        }
       }
+      attempts.seen[currEmoji.innerHTML].add(currEmoji);
+      attempts.seen[prevEmoji.innerHTML].add(prevEmoji);
+    } else {
+      attempts.right++;
+      attempts.total++;
     }
+
+    document.getElementById(
+      "success-rate"
+    ).innerHTML = `${attempts.right}/${attempts.total}`;
 
     prevEmoji = null;
     prevPaired.pending = false;
   };
 
-  attempts.total++;
   prevPaired.timeoutId = setTimeout(prevPaired.timeoutFunc, 700);
   prevPaired.pending = true;
 }
@@ -174,9 +171,7 @@ function gameLogic(event) {
 
 function finishGame() {
   // Store score
-  currScore = Math.round(
-    ((attempts.total - attempts.wrong) / attempts.total) * 100
-  );
+  currScore = Math.round((attempts.right / attempts.total) * 100);
   if (currScore > bestScore) {
     bestScore = currScore;
     sessionStorage.setItem("image-pairing-best-score", bestScore);
@@ -185,16 +180,17 @@ function finishGame() {
   setTimeout(() => {
     cardsGrid.classList.add("game-won");
     document.getElementById("score-number").innerText = `${currScore}%`;
-    document.getElementById("score").style.display = "initial";
+    document.getElementById("best-score").innerText = `${bestScore}%`;
+    document.getElementById("result").style.display = "initial";
   }, 250);
   // Reset previous pointers
-  attempts.seen.clear();
   prevEmoji = null;
-  pairedEmojis = attempts.wrong = attempts.total = 0;
+  attempts.seen.clear();
+  pairedEmojis = attempts.wrong = attempts.right = attempts.total = 0;
 }
 
 function restartGame() {
-  document.getElementById("score").style.display = "none";
+  document.getElementById("result").style.display = "none";
   cardsGrid.classList.remove("game-won");
   cardsGrid.querySelectorAll(".js-emoji").forEach((emoji) => {
     emoji.classList.remove("emoji-reveal");
@@ -206,14 +202,16 @@ function renderCards() {
   let cardsHTML = "";
   cardsArray(gridTotal).forEach((emoji) => {
     cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
+    attempts.seen[emoji] = new Set();
   });
   // Fill grid
   updateGrid();
   cardsGrid.innerHTML = cardsHTML;
-  document.getElementById("best").innerText = `${bestScore}%`;
+  document.getElementById("best-score").innerText = `${bestScore}%`;
   document
     .querySelectorAll(".js-emoji")
     .forEach((emoji) => emoji.addEventListener("click", gameLogic));
+  document.getElementById("success-rate").innerHTML = `${0}/${0}`;
 }
 
 function updateGrid() {
@@ -237,6 +235,6 @@ sizeElement.addEventListener("input", () => {
   renderCards();
 });
 
-document.getElementById("hide-score").addEventListener("click", restartGame);
+document.getElementById("score-ok").addEventListener("click", restartGame);
 
 renderCards();
