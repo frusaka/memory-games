@@ -79,7 +79,7 @@ let prevPaired = {
   },
 };
 
-let attempts = { attempted: new Set(), wrong: 0, total: 0 };
+let attempts = { seen: new Map(), wrong: 0, total: 0 };
 const cardsGrid = document.getElementById("cards");
 
 function shuffle(arr) {
@@ -113,14 +113,22 @@ function celebrate(currEmoji, success) {
       prevEmoji.classList.remove("emoji-reveal");
       currEmoji.classList.remove("emoji-reveal");
       // Update scores
-      if (
-        attempts.attempted.has(prevEmoji) ||
-        attempts.attempted.has(currEmoji)
-      )
+      const prevSeen = attempts.seen.has(prevEmoji.innerHTML);
+      const currSeen =
+        attempts.seen.has(currEmoji.innerHTML) &&
+        attempts.seen.get(currEmoji.innerHTML).has(currEmoji);
+      if (prevSeen || currSeen) {
         attempts.wrong++;
-      else {
-        attempts.attempted.add(prevEmoji);
-        attempts.attempted.add(currEmoji);
+      } else {
+        if (!prevSeen) {
+          attempts.seen.set(prevEmoji.innerHTML, new Set([prevEmoji]));
+        } else {
+          if (attempts.seen.has(currEmoji.innerHTML)) {
+            attempts.seen[currEmoji.innerHTML].add(currEmoji);
+          } else {
+            attempts.seen.set(currEmoji.innerHTML, new Set([currEmoji]));
+          }
+        }
       }
     }
 
@@ -180,7 +188,7 @@ function finishGame() {
     document.getElementById("score").style.display = "initial";
   }, 250);
   // Reset previous pointers
-  attempts.attempted.clear();
+  attempts.seen.clear();
   prevEmoji = null;
   pairedEmojis = attempts.wrong = attempts.total = 0;
 }
