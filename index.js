@@ -126,8 +126,9 @@ function celebrate(currEmoji, success) {
     attempts.total++;
   } else {
     if (
-      attempts.seen[prevEmoji.innerHTML].size ||
-      attempts.seen[currEmoji.innerHTML].has(currEmoji)
+      attempts.seen[currEmoji.innerHTML].has(currEmoji) ||
+      (attempts.seen[prevEmoji.innerHTML].size &&
+        !attempts.seen[prevEmoji.innerHTML].has(prevEmoji))
     ) {
       attempts.total++;
       attempts.wrong++;
