@@ -114,9 +114,8 @@ function celebrate(currEmoji, success) {
       currEmoji.classList.remove("emoji-reveal");
       // Update scores
       if (
-        attempts.seen[prevEmoji.innerHTML].has(prevEmoji) ||
-        (attempts.seen[prevEmoji.innerHTML] &&
-          attempts.seen[currEmoji.innerHTML].has(currEmoji))
+        attempts.seen[prevEmoji.innerHTML] ||
+        attempts.seen[currEmoji.innerHTML].has(currEmoji))
       ) {
         attempts.total++;
         attempts.wrong++;
