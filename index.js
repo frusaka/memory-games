@@ -224,7 +224,7 @@ document.getElementById("start").addEventListener("click", () => {
 
 const sizeElement = document.getElementById("size");
 sizeElement.addEventListener("input", () => {
-  if (sizeElement.value <= 2) return;
+  if (sizeElement.value <= 2 || sizeElement.value > emojis.length) return;
   gridTotal = +sizeElement.value;
   renderCards();
 });
