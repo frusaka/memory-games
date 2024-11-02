@@ -3,10 +3,6 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.2rem;
-  position: absolute;
-  top: 50%;
-  z-index: -1;
-  transform: translateY(-45%);
 }
 
 .emoji {
