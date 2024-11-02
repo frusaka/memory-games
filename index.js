@@ -183,7 +183,7 @@ function gameLogic(event) {
 function finishGame() {
   // Store score
   currScore = Math.round(
-    (attempts.right / attempts.right + attempts.wrong) * 100
+    (attempts.right / (attempts.right + attempts.wrong)) * 100
   );
   if (currScore > bestScore) {
     bestScore = currScore;
