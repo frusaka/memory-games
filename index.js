@@ -66,7 +66,7 @@ let gridTotal = 8;
 let pairedEmojis = (currScore = 0);
 let bestScore =
   JSON.parse(sessionStorage.getItem("image-pairing-best-score")) || 0;
-let attempts = { seen: new Map(), wrong: 0, right: 0, total: 0 };
+let attempts = { seen: new Map(), wrong: 0, right: 0 };
 let prevPaired = {
   pending: false,
   timeoutId: null,
@@ -101,9 +101,9 @@ function celebrate(currEmoji, success) {
   prevPaired.celebrateId = setTimeout(() => {
     currEmoji.classList.add(celebrateClass);
     prevEmoji.classList.add(celebrateClass);
-    document.getElementById(
-      "success-rate"
-    ).innerHTML = `${attempts.right}/${attempts.total}`;
+    document.getElementById("success-rate").innerHTML = `${attempts.right}/${
+      attempts.right + attempts.wrong
+    }`;
   }, 250);
 
   prevPaired.timeoutFunc = () => {
@@ -173,16 +173,18 @@ function gameLogic(event) {
   if (pairedEmojis == gridTotal) {
     // Do the logic but not the visuals
     prevPaired.cancel();
-    document.getElementById(
-      "success-rate"
-    ).innerHTML = `${attempts.right}/${attempts.total}`;
+    document.getElementById("success-rate").innerHTML = `${attempts.right}/${
+      attempts.right + attempts.wrong
+    }`;
     finishGame();
   }
 }
 
 function finishGame() {
   // Store score
-  currScore = Math.round((attempts.right / attempts.total) * 100);
+  currScore = Math.round(
+    (attempts.right / attempts.right + attempts.wrong) * 100
+  );
   if (currScore > bestScore) {
     bestScore = currScore;
     sessionStorage.setItem("image-pairing-best-score", bestScore);
@@ -210,7 +212,7 @@ function renderCards() {
   // Reset previous pointers
   prevEmoji = null;
   attempts.seen.clear();
-  pairedEmojis = attempts.wrong = attempts.right = attempts.total = 0;
+  pairedEmojis = attempts.wrong = attempts.right = 0;
   // Generate the HTML
   let cardsHTML = "";
   cardsArray(gridTotal).forEach((emoji) => {
