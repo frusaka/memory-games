@@ -7,7 +7,6 @@
 }
 
 .emoji {
-  /* margin: auto; */
   font-size: var(--size);
   background-color: #eee;
   transition: transform 0.4s;

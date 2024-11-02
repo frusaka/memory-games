@@ -63,10 +63,10 @@ let emojis = [
 ];
 
 let gridTotal = 8;
-let pairedEmojis = 0;
-let currScore = 0;
+let pairedEmojis = (currScore = 0);
 let bestScore =
   JSON.parse(sessionStorage.getItem("image-pairing-best-score")) || 0;
+let attempts = { seen: new Map(), wrong: 0, right: 0, total: 0 };
 let prevPaired = {
   pending: false,
   timeoutId: null,
@@ -79,10 +79,10 @@ let prevPaired = {
   },
 };
 
-let attempts = { seen: new Map(), wrong: 0, right: 0, total: 0 };
 const cardsGrid = document.getElementById("cards");
 
 function shuffle(arr) {
+  // Give each value a random weight then sort based on that
   return arr
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
@@ -116,6 +116,7 @@ function celebrate(currEmoji, success) {
       prevEmoji.classList.remove("emoji-reveal");
       currEmoji.classList.remove("emoji-reveal");
     }
+    // Let game logic know celebration effects are complete
     prevEmoji = null;
     prevPaired.pending = false;
   };
@@ -123,21 +124,20 @@ function celebrate(currEmoji, success) {
   // Update scores
   if (success) {
     attempts.right++;
-    attempts.total++;
   } else {
+    // Criteria to deduct score
     if (
-      attempts.seen[currEmoji.innerHTML].has(currEmoji) ||
-      (attempts.seen[prevEmoji.innerHTML].size &&
-        !attempts.seen[prevEmoji.innerHTML].has(prevEmoji))
+      attempts.seen[currEmoji.innerHTML].has(currEmoji) || // Already clicked most recent
+      (attempts.seen[prevEmoji.innerHTML].size && // First image has been seen (no matter where)
+        !attempts.seen[prevEmoji.innerHTML].has(prevEmoji)) // First image was seen but not on the same card
     ) {
-      attempts.total++;
       attempts.wrong++;
     }
-
+    // Mark revealed cards as seen
     attempts.seen[prevEmoji.innerHTML].add(prevEmoji);
     attempts.seen[currEmoji.innerHTML].add(currEmoji);
   }
-
+  // Let game logic know celebration effects are pending
   prevPaired.timeoutId = setTimeout(prevPaired.timeoutFunc, 700);
   prevPaired.pending = true;
 }
@@ -163,7 +163,7 @@ function gameLogic(event) {
     return;
   }
 
-  // Pair has been found
+  // Pair has been found so cards no longer responds to clicks
   currEmoji.removeEventListener("click", gameLogic);
   prevEmoji.removeEventListener("click", gameLogic);
 
@@ -171,10 +171,11 @@ function gameLogic(event) {
   pairedEmojis++;
   celebrate(currEmoji, true);
   if (pairedEmojis == gridTotal) {
+    // Do the logic but not the visuals
+    prevPaired.cancel();
     document.getElementById(
       "success-rate"
     ).innerHTML = `${attempts.right}/${attempts.total}`;
-    prevPaired.cancel();
     finishGame();
   }
 }
@@ -186,9 +187,10 @@ function finishGame() {
     bestScore = currScore;
     sessionStorage.setItem("image-pairing-best-score", bestScore);
   }
-  // Smooth reset
+
   setTimeout(() => {
     cardsGrid.classList.add("game-won");
+    // Display scores
     document.getElementById("score-number").innerText = `${currScore}%`;
     document.getElementById("best-score").innerText = `${bestScore}%`;
     document.getElementById("result").style.display = "initial";
@@ -209,6 +211,7 @@ function renderCards() {
   prevEmoji = null;
   attempts.seen.clear();
   pairedEmojis = attempts.wrong = attempts.right = attempts.total = 0;
+  // Generate the HTML
   let cardsHTML = "";
   cardsArray(gridTotal).forEach((emoji) => {
     cardsHTML += `<div class="emoji js-emoji">${emoji}</div>`;
@@ -218,10 +221,11 @@ function renderCards() {
   updateGrid();
   cardsGrid.innerHTML = cardsHTML;
   document.getElementById("best-score").innerText = `${bestScore}%`;
+  // Make cards handle clicks
   document
     .querySelectorAll(".js-emoji")
     .forEach((emoji) => emoji.addEventListener("click", gameLogic));
-  document.getElementById("success-rate").innerHTML = `${0}/${0}`;
+  document.getElementById("success-rate").innerHTML = "0/0";
 }
 
 function updateGrid() {
@@ -233,11 +237,13 @@ function updateGrid() {
 
 window.addEventListener("resize", updateGrid);
 
+// Hide start page on "Start" click
 document.getElementById("start").addEventListener("click", () => {
   document.getElementById("home").style.visibility = "collapse";
   document.getElementById("game").style.display = "flex";
 });
 
+// Respond to changes in size control
 const sizeElement = document.getElementById("size");
 sizeElement.addEventListener("input", () => {
   if (sizeElement.value < 2 || sizeElement.value > emojis.length) return;
