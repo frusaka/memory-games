@@ -62,8 +62,8 @@ let emojis = [
   "🐸",
 ];
 
-let gridTotal = 8;
 let pairedEmojis = (currScore = 0);
+let gridTotal = JSON.parse(localStorage.getItem("image-pairing-size")) || 8;
 let bestScore =
   JSON.parse(sessionStorage.getItem("image-pairing-best-score")) || 0;
 let attempts = { seen: new Map(), wrong: 0, right: 0 };
@@ -250,8 +250,11 @@ const sizeElement = document.getElementById("size");
 sizeElement.addEventListener("input", () => {
   if (sizeElement.value < 2 || sizeElement.value > emojis.length) return;
   gridTotal = +sizeElement.value;
+  localStorage.setItem("image-pairing-size", gridTotal);
   renderCards();
 });
+
+sizeElement.value = gridTotal;
 
 document.getElementById("score-ok").addEventListener("click", restartGame);
 
